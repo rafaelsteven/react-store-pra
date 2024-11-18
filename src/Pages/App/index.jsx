@@ -1,3 +1,4 @@
+import { useRoutes, BrowserRouter } from 'react-router-dom';
 import { Home } from '../Home';
 import { MyAccount } from '../MyAccount';
 import { MyOrder } from '../MyOrder';
@@ -6,12 +7,25 @@ import { NotFound } from '../NotFound';
 import { Signin } from '../Signin';
 import './App.css';
 
-function App() {
+const AppRoutes = () =>{
+  let router = useRoutes([
+    { path:'/',element:<Home /> },
+    { path:'/my-account',element:<MyAccount /> },
+    { path:'/my-order',element:<MyOrder /> },
+    { path:'/my-orders',element:<MyOrders /> },
+    { path:'/sign-in',element:<Signin /> },
+    { path:'/*',element:<NotFound /> },
+  ]);
 
+  return router;
+
+};
+
+const App = () => {
   return (
-    <div className='bg-red-500'>
-      <Home/>
-    </div>
+    <BrowserRouter>
+      <AppRoutes />
+    </BrowserRouter>
   )
 }
 
