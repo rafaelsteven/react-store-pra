@@ -2,10 +2,7 @@ import { useState,useEffect } from "react";
 import { Card } from "../../Components/Card";
 import { ProductDetail } from "../../Components/ProductDetail";
 
-import { useContext } from "react";
-import { ShoppingCartContext } from "../../Context";
 function Home() {
-  const context = useContext(ShoppingCartContext);
   const [items,setItems] = useState(null);
 
   useEffect(()=>{
