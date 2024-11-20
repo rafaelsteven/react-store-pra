@@ -1,3 +1,8 @@
+
+import { useContext } from "react";
+import { ShoppingBagIcon } from '@heroicons/react/24/solid'
+import { ShoppingCartContext } from "../../Context";
+
 const menuLeft = [
     {
         className:"text-lg font-semibold",
@@ -36,38 +41,50 @@ const menuLeft = [
         isActive:true
     }
 ];
+const MenuRight = () => {
+    const menuRight = [
+        {
+            className:"text-black/60",
+            to:"",
+            text:"rs@admin.com",
+            isActive:false
+        },
+        {
+            className:"",
+            to:"/my-orders",
+            text:"My Orders",
+            isActive:true
+        },
+        {
+            className:"",
+            to:"/my-account",
+            text:"My Account",
+            isActive:true
+        },
+        {
+            className:"",
+            to:"/sign-in",
+            text:"Sign In",
+            isActive:true
+        },
+        {
+            className:"flex justify-center",
+            to:"/my-order",
+            text:<Cart/>,
+            isActive:true
+        }
+    ];
+    return menuRight;
+}
 
-const menuRight = [
-    {
-        className:"text-black/60",
-        to:"",
-        text:"rs@admin.com",
-        isActive:false
-    },
-    {
-        className:"",
-        to:"/my-orders",
-        text:"My Orders",
-        isActive:true
-    },
-    {
-        className:"",
-        to:"/my-account",
-        text:"My Account",
-        isActive:true
-    },
-    {
-        className:"",
-        to:"/sign-in",
-        text:"Sign In",
-        isActive:true
-    },
-    {
-        className:"",
-        to:"/my-order",
-        text:"🛒 0 ",
-        isActive:true
-    }
-];
+const Cart = () => {
+    const context = useContext(ShoppingCartContext);
+    return (
+        <div className="flex items-center justify-center">
+            <ShoppingBagIcon className="w-6 h-6 text-black"/>
+            <span>{context.countCars} </span>
+        </div>
+    );
+};
 
-export {menuLeft,menuRight};
+export {menuLeft,MenuRight};

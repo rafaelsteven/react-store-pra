@@ -1,5 +1,4 @@
-import { NavLink } from "react-router-dom";
-import { menuLeft, menuRight } from "./navbar-item";
+import { menuLeft, MenuRight } from "./navbar-item";
 import { LiItem } from "./LiItem";
 const Navbar = () => {
 
@@ -14,7 +13,7 @@ const Navbar = () => {
                 )}
             </ul>
             <ul className="flex items-center gap-3">
-                {menuRight.map((menu) => (
+                {MenuRight().map((menu) => (
                     <LiItem
                         key={menu.text}
                         menu={menu}
