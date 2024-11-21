@@ -9,7 +9,6 @@ const ProductDetail = () => {
         isProductDetailOpen,
         closeProductDetail
     } = useContext(ShoppingCartContext);
-    console.log(productToShow.images);
     return (
         <aside className={`${isProductDetailOpen ? 'opacity-100 right-2' : 'opacity-0 right-[-380px]'} flex flex-col fixed  top-[80px] p-6 border bg-white/60 backdrop-blur-3xl border-gray-400 rounded-lg w-[360px] h-[calc(100vh-90px)] transition-all duration-[3000]`}>
             <div className='flex items-center justify-between'>
@@ -21,7 +20,7 @@ const ProductDetail = () => {
             <figure>
                 <img 
                 className="w-full h-full rounded-lg" 
-                src={productToShow.images} 
+                src={productToShow.images?.[0]} 
                 alt={productToShow.title}
                 />
             </figure>

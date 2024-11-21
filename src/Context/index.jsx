@@ -17,7 +17,11 @@ export const ShoppingCartProvider = ({children}) => {
 
     // Carts product
     const [cartProducts, setCartProducts] = useState([]);
- console.log(cartProducts);
+    
+    //status windos My Order
+    const [isCheckoutSideMenu,setIsCheckoutSideMenu] = useState(false);
+    const oprenCheckoutSideMenu = () => setIsCheckoutSideMenu(true);
+    const closeCheckoutSideMenu = () => setIsCheckoutSideMenu(false);
     return(
         <ShoppingCartContext.Provider
         value={{
@@ -29,7 +33,10 @@ export const ShoppingCartProvider = ({children}) => {
             productToShow,
             setProductToShow,
             cartProducts, 
-            setCartProducts
+            setCartProducts,
+            isCheckoutSideMenu,
+            oprenCheckoutSideMenu,
+            closeCheckoutSideMenu
         }}
         >
             {children}
