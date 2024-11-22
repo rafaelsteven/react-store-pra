@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from "../../Context";
 
+
 const menuLeft = [
     {
         className:"text-lg font-semibold",
@@ -42,6 +43,10 @@ const menuLeft = [
     }
 ];
 const MenuRight = () => {
+    const {
+        isCheckoutSideMenu,
+            setIsCheckoutSideMenu,
+    } = useContext(ShoppingCartContext);
     const menuRight = [
         {
             className:"text-black/60",
@@ -69,9 +74,11 @@ const MenuRight = () => {
         },
         {
             className:"flex justify-center",
-            to:"/my-order",
+            to:"",
             text:<Cart/>,
-            isActive:true
+            isActive:true,
+            isFuntion:true,
+            onClick:()=>{setIsCheckoutSideMenu(!isCheckoutSideMenu)}
         }
     ];
     return menuRight;
