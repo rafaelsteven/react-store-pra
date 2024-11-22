@@ -1,8 +1,9 @@
-import { useContext } from "react";
+import { useContext,useEffect } from "react";
 import { ShoppingCartContext } from "../../Context";
 import { Card } from "../../Components/Card";
 import { ProductDetail } from "../../Components/ProductDetail";
 import { CheckoutSideMenu } from "../../Components/CheckoutSideMenu";
+
 
 function Home() {
   
@@ -10,12 +11,26 @@ function Home() {
     items,
     searchByTitle, 
     setSearchByTitle,
-    filterItems
+    filterItems,
+    setCategoryFilter,
+    setFilterItems
         } = useContext(ShoppingCartContext);
-  
+    const currentPath = window.location.pathname;
+    let indexOrder = currentPath.substring(currentPath.lastIndexOf('/')+1);
+    // if (indexOrder !== 'all') setCategoryFilter(indexOrder)
+    // else setCategoryFilter('');
+
+    useEffect(() => {
+      if (indexOrder !== 'all') {
+        setCategoryFilter(indexOrder);
+      } else {
+        setCategoryFilter(''); 
+      }
+    }, [indexOrder,setFilterItems]); 
+
+
     const renderView = () => {
-      if (searchByTitle?.length > 0)
-      {
+
         if(filterItems?.length > 0) {
           return (filterItems?.map((item)=>(
             <Card
@@ -27,14 +42,6 @@ function Home() {
           return (<div> No search results </div>);
         }
         
-      } else {
-        return( items?.map((item)=>(
-          <Card
-          key={item.id}
-          data={item}
-          />
-        )));
-      }
     }
 
   return (

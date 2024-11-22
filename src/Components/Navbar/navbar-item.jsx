@@ -3,8 +3,9 @@ import { useContext } from "react";
 import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from "../../Context";
 
-
-const menuLeft = [
+const MenuLeft =  () => { 
+    const context = useContext(ShoppingCartContext);
+    const menuLeft = [
     {
         className:"text-lg font-semibold",
         to:"/",
@@ -13,35 +14,17 @@ const menuLeft = [
     },
     {
         className:"",
-        to:"/all",
+        to:"/category/55",
         text:"All",
         isActive:true
-    },
-    {
-        className:"",
-        to:"/clothes",
-        text:"Clothes",
-        isActive:true
-    },
-    {
-        className:"",
-        to:"/electronics",
-        text:"Electronics",
-        isActive:true
-    },
-    {
-        className:"",
-        to:"/toys",
-        text:"Toys",
-        isActive:true
-    },
-    {
-        className:"",
-        to:"/others",
-        text:"Others",
-        isActive:true
-    }
-];
+    }];
+    const categories = context.categories?.slice(0, 5).map(category => 
+        ({ to: `/category/${category.id}`, text: category.name, isActive: true })
+    ) || [];
+
+    const menuLeftResponse = [...menuLeft,...categories];
+return menuLeftResponse;
+};
 const MenuRight = () => {
     const {
         isCheckoutSideMenu,
@@ -94,4 +77,4 @@ const Cart = () => {
     );
 };
 
-export {menuLeft,MenuRight};
+export {MenuLeft,MenuRight};

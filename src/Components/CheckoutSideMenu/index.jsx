@@ -14,7 +14,8 @@ const CheckoutSideMenu = () => {
         countCars,
         setCountCars,
         order,
-        setOrder
+        setOrder,
+        setSearchByTitle
     } = useContext(ShoppingCartContext);
     
     const minusProduct = (id) => {
@@ -74,9 +75,10 @@ const CheckoutSideMenu = () => {
             totalProducts: countCars,
             totalPrice: totalPrice(cartProducts)
         }
-
+        setCountCars(0);
         setOrder([...order, orderToAdd]);
         setCartProducts([]);
+        setSearchByTitle(null);
 
     }
     return (

@@ -10,11 +10,7 @@ export const ShoppingCartProvider = ({children}) => {
 
     const [filterItems,setFilterItems] = useState(null);
 
-    useEffect(()=>{
-        fetch('https://api.escuelajs.co/api/v1/products')
-        .then(response => response.json())
-        .then(data => setItems(data))
-      },[]);
+
 
     // Shopping cart
     const [countCars,setCountCars] = useState(0);
@@ -46,8 +42,39 @@ export const ShoppingCartProvider = ({children}) => {
         return items?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()));
     }
     useEffect(()=>{
-        if(searchByTitle) setFilterItems(filterdItemsByTitle(items,searchByTitle));
+        if(searchByTitle) setFilterItems(filterdItemsByTitle(items,searchByTitle))
+        else setFilterItems(items);
       },[items,searchByTitle]);
+
+    
+    const [categoryFilter, setCategoryFilter] = useState('');
+
+    const [categories, setCategories] = useState(null);
+
+    useEffect(()=>{
+        fetch('https://api.escuelajs.co/api/v1/categories')
+        .then(response => response.json())
+        .then(data => setCategories(data))
+      },[]);
+
+    useEffect(()=>{
+        let url = 'https://api.escuelajs.co/api/v1/products';
+        if(categoryFilter) url = `https://api.escuelajs.co/api/v1/products?categoryId=${categoryFilter}`;
+        fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            if (data.length === 0) {
+                setItems([]);
+            } else {
+                setItems(data);
+            }
+        })
+        .catch(error => {
+            console.error('Error al obtener los datos:', error);
+            setItems([]); 
+        });
+      },[categoryFilter]);
+
     return(
         <ShoppingCartContext.Provider
         value={{
@@ -71,7 +98,9 @@ export const ShoppingCartProvider = ({children}) => {
             searchByTitle, 
             setSearchByTitle,
             filterItems,
-            setFilterItems
+            setFilterItems,
+            categories,
+            setCategoryFilter
         }}
         >
             {children}
