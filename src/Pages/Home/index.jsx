@@ -8,11 +8,34 @@ function Home() {
   
   const {
     items,
-    setItems,
     searchByTitle, 
-    setSearchByTitle
+    setSearchByTitle,
+    filterItems
         } = useContext(ShoppingCartContext);
-
+  
+    const renderView = () => {
+      if (searchByTitle?.length > 0)
+      {
+        if(filterItems?.length > 0) {
+          return (filterItems?.map((item)=>(
+            <Card
+            key={item.id}
+            data={item}
+            />
+          )));
+        }else {
+          return (<div> No search results </div>);
+        }
+        
+      } else {
+        return( items?.map((item)=>(
+          <Card
+          key={item.id}
+          data={item}
+          />
+        )));
+      }
+    }
 
   return (
     <>
@@ -28,12 +51,7 @@ function Home() {
         />
       <div className="grid w-full max-w-screen-lg grid-cols-4 gap-4">
         {
-          items?.map((item)=>(
-            <Card
-            key={item.id}
-            data={item}
-            />
-          ))
+          renderView()
         }
         <ProductDetail />
         <CheckoutSideMenu />
