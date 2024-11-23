@@ -1,15 +1,16 @@
 import { createContext, useState,useEffect} from "react";
+import { useLocalStorage } from "./useLocalStorage";
+
 
 export const ShoppingCartContext = createContext();
 
 export const ShoppingCartProvider = ({children}) => {
-
+    
 
     //Items products
     const [items,setItems] = useState(null);
 
     const [filterItems,setFilterItems] = useState(null);
-
 
 
     // Shopping cart
@@ -75,6 +76,62 @@ export const ShoppingCartProvider = ({children}) => {
         });
       },[categoryFilter]);
 
+    // Local storage
+    const {
+        item: localStorageAccount,
+    saveItem: setLocalStorageAccount
+     } = useLocalStorage('account',{});
+     const {
+        item: localStorageSignOut,
+    saveItem: setLocalStorageSignOut
+     } = useLocalStorage('sign_out',true);
+
+     const {
+        item: registeredUser,
+    saveItem: setRegisteredUser
+     } = useLocalStorage('registeredUser',[]);
+
+     const validateUser = (dataUser) => {
+        const usersArray = JSON.parse(registeredUser);
+    
+        const foundUser = usersArray.find(user => 
+            user.email === dataUser.email && user.password === dataUser.password
+        );
+    
+        return foundUser || null;
+    };
+
+
+    const saveLogin = (newAccount) => {
+        
+       const validarLogin = validateUser(newAccount);
+        console.log(validarLogin);
+        if (!validarLogin) {        
+            alert('Email or password incorrect');
+            return flase;
+        }
+
+        setLocalStorageAccount('account', JSON.stringify(newAccount));
+        // setAccount(newAccount);
+        setLocalStorageSignOut('sign_out', JSON.stringify(false));
+        setSignOut(false);
+        setAccount(validarLogin);
+        return true;
+        
+    };
+
+    const saveRegisteredUser = (newRegisteredUser) => {
+        const usersArray = typeof registeredUser === 'string' ? JSON.parse(registeredUser) : registeredUser;
+        setRegisteredUser('registeredUser', JSON.stringify([...usersArray,newRegisteredUser]));
+        setFormLoginOrRegister('login');
+    };
+
+    const [sign_out, setSignOut] = useState();
+    const [account, setAccount] = useState(() => {
+        return JSON.parse(localStorage.getItem('account')) || null;
+    });
+    const [formLoginOrRegister, setFormLoginOrRegister] = useState('login');
+
     return(
         <ShoppingCartContext.Provider
         value={{
@@ -100,7 +157,13 @@ export const ShoppingCartProvider = ({children}) => {
             filterItems,
             setFilterItems,
             categories,
-            setCategoryFilter
+            setCategoryFilter,
+            saveLogin,
+            saveRegisteredUser,
+            formLoginOrRegister,
+            setFormLoginOrRegister,
+            sign_out,
+            account
         }}
         >
             {children}

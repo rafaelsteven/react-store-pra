@@ -2,6 +2,7 @@
 import { useContext } from "react";
 import { ShoppingBagIcon } from '@heroicons/react/24/solid'
 import { ShoppingCartContext } from "../../Context";
+import { isPast } from "date-fns";
 
 const MenuLeft =  () => { 
     const context = useContext(ShoppingCartContext);
@@ -28,24 +29,30 @@ return menuLeftResponse;
 const MenuRight = () => {
     const {
         isCheckoutSideMenu,
-            setIsCheckoutSideMenu,
+        setIsCheckoutSideMenu,
+        sign_out,
+        account
     } = useContext(ShoppingCartContext);
+    const dataUser = JSON.parse(account);
     const menuRight = [
         {
             className:"text-black/60",
             to:"",
-            text:"rs@admin.com",
+            isLogin:true,
+            text:dataUser.email,
             isActive:false
         },
         {
             className:"",
             to:"/my-orders",
+            isLogin:true,
             text:"My Orders",
             isActive:true
         },
         {
             className:"",
             to:"/my-account",
+            isLogin:true,
             text:"My Account",
             isActive:true
         },
@@ -64,7 +71,12 @@ const MenuRight = () => {
             onClick:()=>{setIsCheckoutSideMenu(!isCheckoutSideMenu)}
         }
     ];
-    return menuRight;
+    const menuRightResponse = menuRight.filter(menu=>{
+        if(menu.isLogin && !sign_out){
+            return menu;
+        }else if(!menu.isLogin) return menu;
+    });
+    return menuRightResponse;
 }
 
 const Cart = () => {

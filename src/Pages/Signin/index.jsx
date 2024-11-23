@@ -1,9 +1,17 @@
-function Signin() {
+import { useContext,useEffect } from "react";
+import { ShoppingCartContext } from "../../Context";
+import { FormLogin } from "../../Components/FormLogin";
+import { FormUser } from "../../Components/FormUser";
 
+function Signin() {
+  const {
+    formLoginOrRegister,
+    sign_out
+        } = useContext(ShoppingCartContext);
     return (
-      <div className='bg-red-500'>
-        Signin
-      </div>
+      <>
+        {formLoginOrRegister === "login" ? <FormLogin/> : <FormUser/>}
+      </>
     )
   }
   
