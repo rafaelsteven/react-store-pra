@@ -84,7 +84,7 @@ export const ShoppingCartProvider = ({children}) => {
      const {
         item: localStorageSignOut,
     saveItem: setLocalStorageSignOut
-     } = useLocalStorage('sign_out',true);
+     } = useLocalStorage('sign_in',false);
 
      const {
         item: registeredUser,
@@ -92,7 +92,7 @@ export const ShoppingCartProvider = ({children}) => {
      } = useLocalStorage('registeredUser',[]);
 
      const validateUser = (dataUser) => {
-        const usersArray = JSON.parse(registeredUser);
+        const usersArray = registeredUser;
     
         const foundUser = usersArray.find(user => 
             user.email === dataUser.email && user.password === dataUser.password
@@ -111,9 +111,9 @@ export const ShoppingCartProvider = ({children}) => {
             return flase;
         }
 
-        setLocalStorageAccount('account', JSON.stringify(newAccount));
+        setLocalStorageAccount('account', validarLogin);
         // setAccount(newAccount);
-        setLocalStorageSignOut('sign_out', JSON.stringify(false));
+        setLocalStorageSignOut('sign_in',true);
         setSignOut(false);
         setAccount(validarLogin);
         return true;
@@ -122,16 +122,50 @@ export const ShoppingCartProvider = ({children}) => {
 
     const saveRegisteredUser = (newRegisteredUser) => {
         const usersArray = typeof registeredUser === 'string' ? JSON.parse(registeredUser) : registeredUser;
-        setRegisteredUser('registeredUser', JSON.stringify([...usersArray,newRegisteredUser]));
+        const validarEmail = usersArray.find(user => user.email === newRegisteredUser.email);
+        if (validarEmail) {
+            alert('Email already exists');
+            return;
+        }
+        setRegisteredUser('registeredUser', [...usersArray,newRegisteredUser]);
         setFormLoginOrRegister('login');
     };
 
-    const [sign_out, setSignOut] = useState();
+    const [sign_in, setSignOut] = useState(() => {
+        return JSON.parse(localStorage.getItem('sign_in')) || null;
+    });
     const [account, setAccount] = useState(() => {
         return JSON.parse(localStorage.getItem('account')) || null;
     });
     const [formLoginOrRegister, setFormLoginOrRegister] = useState('login');
 
+    const validarSignIn = () => {
+        const varAccount = JSON.parse(localStorage.getItem('account')); // Parse de la cadena JSON a objeto
+        const varSign_in = JSON.parse(localStorage.getItem('sign_in'));
+        return { varSign_in, varAccount }; // Retorna como un objeto
+      };
+    const signOut = () => {
+        localStorage.removeItem('sign_in');
+        localStorage.removeItem('account');
+        setSignOut(false);
+        setAccount(null);
+        window.location.href = "/sign-in";
+    };
+
+    const editAccountData = (newAccount) => {
+        const usersArray = registeredUser;
+        const dataUser = JSON.parse(localStorage.getItem('account'));
+        const foundUser = usersArray.map(user => {
+            if(user.email === dataUser.email)
+                return newAccount;
+            return user;
+        } );
+        setRegisteredUser('registeredUser', foundUser);
+        setLocalStorageAccount('account', newAccount);
+        setEditAccount(true);
+    };  
+
+    const [editAccount, setEditAccount] = useState(true);
     return(
         <ShoppingCartContext.Provider
         value={{
@@ -162,8 +196,15 @@ export const ShoppingCartProvider = ({children}) => {
             saveRegisteredUser,
             formLoginOrRegister,
             setFormLoginOrRegister,
-            sign_out,
-            account
+            sign_in,
+            account,
+            setAccount,
+            validarSignIn,
+            setLocalStorageSignOut,
+            signOut,
+            editAccount,
+            setEditAccount,
+            editAccountData
         }}
         >
             {children}

@@ -16,6 +16,7 @@ console.log(order);
       
       </div>
         {
+          order.length === 0 ? <p className="text-center">There are no orders</p>:
           order.map((order,index)=>(
             <Link key={index} to={`/my-orders/${index}`}>
               <OrdersCard 

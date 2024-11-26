@@ -1,5 +1,6 @@
-import { useRoutes, BrowserRouter } from 'react-router-dom';
-import { ShoppingCartProvider } from '../../Context';
+import { useRoutes, BrowserRouter,Navigate } from 'react-router-dom';
+import { useContext } from "react";
+import { ShoppingCartProvider,ShoppingCartContext } from '../../Context';
 import { Home } from '../Home';
 import { MyAccount } from '../MyAccount';
 import { MyOrder } from '../MyOrder';
@@ -10,10 +11,17 @@ import { Navbar } from '../../Components/Navbar';
 import { Layout } from "../../Components/Layout";
 import './App.css';
 
-const AppRoutes = () =>{
+
+
+const AppRoutesValidation = () =>{
+  const {
+    validarSignIn
+        } = useContext(ShoppingCartContext);
+  
+    const { varSign_in } = validarSignIn();
   let router = useRoutes([
-    { path:'/',element:<Home /> },
-    { path:'/category/:category',element:<Home /> },
+    { path:'/',element:varSign_in ? <Home /> : <Navigate replace to="/sign-in" /> },
+    { path:'/category/:category',element:varSign_in ? <Home /> : <Navigate replace to="/sign-in" /> },
     { path:'/my-account',element:<MyAccount /> },
     { path:'/my-order',element:<MyOrder /> },
     { path:'/my-orders',element:<MyOrders /> },
@@ -27,12 +35,16 @@ const AppRoutes = () =>{
 
 };
 
+
+
 const App = () => {
+  // AppRoutesValidation();
+
   return (
     <ShoppingCartProvider>
       <BrowserRouter>
         <Layout>
-          <AppRoutes />
+          <AppRoutesValidation />
         </Layout>
         <Navbar/>
       </BrowserRouter>

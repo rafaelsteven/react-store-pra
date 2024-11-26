@@ -8,7 +8,6 @@ import { CheckoutSideMenu } from "../../Components/CheckoutSideMenu";
 function Home() {
   
   const {
-    items,
     searchByTitle, 
     setSearchByTitle,
     filterItems,

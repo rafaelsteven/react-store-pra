@@ -15,7 +15,7 @@ const MenuLeft =  () => {
     },
     {
         className:"",
-        to:"/category/55",
+        to:"/category/all",
         text:"All",
         isActive:true
     }];
@@ -30,16 +30,16 @@ const MenuRight = () => {
     const {
         isCheckoutSideMenu,
         setIsCheckoutSideMenu,
-        sign_out,
-        account
+        validarSignIn,
+        signOut
     } = useContext(ShoppingCartContext);
-    const dataUser = JSON.parse(account);
+    const { varSign_in, varAccount } = validarSignIn();
     const menuRight = [
         {
             className:"text-black/60",
             to:"",
             isLogin:true,
-            text:dataUser.email,
+            text:varSign_in ?varAccount.email : "",
             isActive:false
         },
         {
@@ -60,7 +60,9 @@ const MenuRight = () => {
             className:"",
             to:"/sign-in",
             text:"Sign In",
-            isActive:true
+            isActive:true,
+            isToTextExt:"Sign Out",
+            isAcctionExt:()=>{signOut()},
         },
         {
             className:"flex justify-center",
@@ -72,7 +74,15 @@ const MenuRight = () => {
         }
     ];
     const menuRightResponse = menuRight.filter(menu=>{
-        if(menu.isLogin && !sign_out){
+        if(menu.isToTextExt && varSign_in){
+            menu.text = menu.isToTextExt;
+            menu.to = '';
+            menu.isFuntion=true,
+            menu.onClick = menu.isAcctionExt;
+            return menu;
+        }
+
+        if(varSign_in && menu.isLogin){
             return menu;
         }else if(!menu.isLogin) return menu;
     });
